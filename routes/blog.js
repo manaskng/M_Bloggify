@@ -26,7 +26,7 @@ router.get("/add-new", (req, res) => {
 });
 
 // Handle blog creation
-router.post("/add-new", upload.single("coverImageURL"), async (req, res) => {
+router.post("/add-new", upload.single("coverImage"), async (req, res) => {
   try {
     const { title, body } = req.body;
 
