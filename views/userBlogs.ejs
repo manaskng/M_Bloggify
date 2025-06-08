@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head") %>
+  <title><%= userName %>'s Blogs</title>
+</head>
+<body>
+  <%- include("./partials/nav") %>
+
+  <div class="container mt-4">
+    <h2 class="mb-4 text-center">Blogs by <%= userName %></h2>
+
+    <% if (blogs.length === 0) { %>
+      <p class="text-center">No blogs found for this user.</p>
+    <% } else { %>
+      <div class="row">
+        <% blogs.forEach(blog => { %>
+          <div class="col-md-4 mb-4">
+            <div class="card h-100">
+              <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="cover">
+              <div class="card-body">
+                <h5 class="card-title"><%= blog.title %></h5>
+                <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
+                <a href="/blog/<%= blog._id %>" class="btn btn-primary">Read More</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+
+  <%- include("./partials/script") %>
+</body>
+</html>

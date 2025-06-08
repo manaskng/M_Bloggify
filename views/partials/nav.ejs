@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">M_Bloggify</a>
+
+    <form class="d-flex" action="/user/search" method="GET">
+      <input class="form-control me-2" type="search" name="q" placeholder="Search blogs or users" aria-label="Search" />
+      <button class="btn btn-outline-light" type="submit">Search</button>
+    </form>
+
+    <ul class="navbar-nav ms-auto">
+      <% if (user) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog/add-new">Add Blog</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/<%= user._id %>/blogs"><%= user.fullname %></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/logout">Logout</a>
+        </li>
+      <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signin">Sign In</a>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <%- include("./partials/head") %>
+    <title>SignIn page</title>
+</head>
+<body>
+    <header>
+        <h1>Welcome ,Please SignIn</h1>
+    </header>
+    <main>
+      <%- include("./partials/nav") %>  
+    </main>
+    <%- include("./partials/script") %>
+    <div class ="container" mt-4>
+
+        <form action ="/user/signin" method="POST">
+   
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Password</label>
+    <input type="password"  name ="password" class="form-control" id="exampleInputPassword1">
+    </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+    </div>
+    <footer>
+        <p>&copy; 2025 Your Name. All rights reserved.</p>
+    </footer>
+</body>
+</html>

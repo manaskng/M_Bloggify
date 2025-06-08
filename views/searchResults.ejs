@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include("./partials/head") %>
+</head>
+<body>
+  <%- include("./partials/nav") %>
+
+  <div class="container mt-4">
+    <h2>Search results for "<%= query %>"</h2>
+
+    <% if (blogs.length === 0 && users.length === 0) { %>
+      <p>No results found.</p>
+    <% } %>
+
+    <% if (blogs.length > 0) { %>
+      <h4>Blogs:</h4>
+      <% blogs.forEach(blog => { %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <h5 class="card-title"><%= blog.title %></h5>
+            <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
+            <a href="/blog/<%= blog._id %>" class="btn btn-primary">Read More</a>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+
+    <% if (users.length > 0) { %>
+      <h4>Users:</h4>
+      <% users.forEach(user => { %>
+        <div>
+          <a href="/user/<%= user._id %>/blogs"><%= user.fullname %></a>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+
+  <%- include("./partials/script") %>
+</body>
+</html>
