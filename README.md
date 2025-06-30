@@ -1,6 +1,6 @@
-# 📝 Blogging Platform
+# 📝 Blogging Platform(JWT AUTHENTICATION)
 
-A full-stack blogging platform built with **Node.js**, **Express**, **MongoDB**, and **EJS** templating. Users can sign up, create, edit, delete blogs, and view others' blogs — all wrapped in a responsive UI.
+A full-stack blogging platform built wit  **Node.js**, **Express**, **MongoDB**, and **EJS** templating. Users can sign up, create, edit, delete blogs, and view others' blogs — all wrapped in a responsive UI.
 ## 🚀 Features
 
 - ✅ User Authentication (Signup / Login / Logout)
