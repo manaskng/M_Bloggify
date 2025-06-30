@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="/">M_Bloggify</a>
 
-    <form class="d-flex" action="/user/search" method="GET">
+    <form class="d-flex me-auto ms-3" action="/user/search" method="GET">
       <input class="form-control me-2" type="search" name="q" placeholder="Search blogs or users" aria-label="Search" />
       <button class="btn btn-outline-light" type="submit">Search</button>
     </form>
@@ -21,6 +21,9 @@
       <% } else { %>
         <li class="nav-item">
           <a class="nav-link" href="/user/signin">Sign In</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/signup">Sign Up</a>
         </li>
       <% } %>
     </ul>
