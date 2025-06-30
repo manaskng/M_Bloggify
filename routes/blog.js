@@ -77,14 +77,61 @@ router.get("/user/:userId/blogs", async (req, res) => {
       return res.status(404).send("No blogs found for this user");
     }
 
-    return res.render("userBlogs", {
-      blogs: userBlogs,
-      user: req.user,
-    });
+    res.render("userBlogs", {
+  blogs: userBlogs,
+  userName: user.fullname,
+  user: req.user // This is required to match `user._id`
+});
+
   } catch (err) {
     console.error(err);
     return res.status(500).send("Internal server error");
   }
 });
+//adding edit and delete feature by a User
+router.post("/delete/:id", async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  // 🛡 Ensure only the creator can delete
+  if (blog.createdBy.toString() !== req.user._id.toString()) {
+    return res.status(403).send("Unauthorized");
+  }
+
+  await Blog.findByIdAndDelete(req.params.id);
+  res.redirect("/");
+});
+// edit blog by that user first get blog then post data from edit-blog
+router.get("/edit/:id", async (req, res) => {
+  const blog = await Blog.findById(req.params.id);
+
+  // 🛡 Check permission
+  if (blog.createdBy.toString() !== req.user._id.toString()) {
+    return res.status(403).send("Unauthorized");
+  }
+
+  res.render("edit-blog", {
+    user: req.user,
+    blog,
+  });
+});
+
+router.post("/edit/:id", async (req, res) => {
+  const { title, body, coverImageURL } = req.body;
+  const blog = await Blog.findById(req.params.id);
+
+  // 🛡 Check permission
+  if (blog.createdBy.toString() !== req.user._id.toString()) {
+    return res.status(403).send("Unauthorized");
+  }
+
+  blog.title = title;
+  blog.body = body;
+  blog.coverImageURL = coverImageURL;
+
+  await blog.save();
+  res.redirect("/");
+});
+
+
 
 module.exports = router;

@@ -14,19 +14,41 @@
       <p class="text-center">No blogs found for this user.</p>
     <% } else { %>
       <div class="row">
-        <% blogs.forEach(blog => { %>
-          <div class="col-md-4 mb-4">
-            <div class="card h-100">
-              <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="cover">
-              <div class="card-body">
-                <h5 class="card-title"><%= blog.title %></h5>
-                <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
-                <a href="/blog/<%= blog._id %>" class="btn btn-primary">Read More</a>
-              </div>
-            </div>
+  <% blogs.forEach(blog => { %>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-sm">
+
+        <% if (blog.coverImageURL) { %>
+          <% if (blog.coverImageURL.endsWith(".mp4")) { %>
+            <video class="card-img-top" controls>
+              <source src="<%= blog.coverImageURL %>" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          <% } else { %>
+            <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="cover" />
+          <% } %>
+        <% } %>
+
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title"><%= blog.title %></h5>
+          <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
+
+          <div class="mt-auto d-flex gap-2">
+            <a href="/blog/<%= blog._id %>" class="btn btn-sm btn-primary">Read More</a>
+
+            <% if (user && blog.createdBy._id.toString() === user._id.toString()) { %>
+              <a href="/blog/edit/<%= blog._id %>" class="btn btn-sm btn-success">✏️ Edit</a>
+              <form action="/blog/delete/<%= blog._id %>" method="POST">
+                <button type="submit" class="btn btn-sm btn-danger">🗑️ Delete</button>
+              </form>
+            <% } %>
           </div>
-        <% }) %>
+        </div>
       </div>
+    </div>
+  <% }) %>
+</div>
+
     <% } %>
   </div>
 

@@ -12,10 +12,10 @@ function checkForAuthenicationCookie(cookieName) {
 
     try {
       const userPayload = validateToken(token);
-      const user = await User.findById(userPayload._id);  // 🔥 fetch full user
+      const user = await User.findById(userPayload._id);  
 
-      req.user = user; // 💥 this is the actual user (not just payload)
-      res.locals.user = user; // 💥 now accessible in all EJS views
+      req.user = user; 
+      res.locals.user = user; 
     } catch (err) {
       req.user = null;
       res.locals.user = null;

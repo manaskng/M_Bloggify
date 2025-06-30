@@ -91,6 +91,8 @@ router.get("/search", async (req, res) => {
     console.error("Search error:", err);
     res.status(500).send("Error performing search");
   }
+  
+
 });
 
 

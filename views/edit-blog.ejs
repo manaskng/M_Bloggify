@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%- include("./partials/head") %>
+  <title>Edit Blog</title>
+</head>
+<body>
+  <%- include("./partials/nav") %>
+  <div class="container mt-4">
+    <h2>Edit Blog</h2>
+    <form action="/blog/edit/<%= blog._id %>" method="POST">
+      <div class="mb-3">
+        <label>Title</label>
+        <input name="title" class="form-control" value="<%= blog.title %>" required />
+      </div>
+
+      <div class="mb-3">
+        <label>Content</label>
+        <textarea name="body" class="form-control" rows="6"><%= blog.body %></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label>Cover Image URL</label>
+        <input name="coverImageURL" class="form-control" value="<%= blog.coverImageURL %>" />
+      </div>
+
+      <button type="submit" class="btn btn-primary">Update Blog</button>
+    </form>
+  </div>
+</body>
+</html>

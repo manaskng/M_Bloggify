@@ -1,0 +1,26 @@
+<div class="card mb-4 shadow-sm">
+  <% if (blog.coverImageURL) { %>
+    <% if (blog.coverImageURL.endsWith(".mp4")) { %>
+      <video class="card-img-top" controls>
+        <source src="<%= blog.coverImageURL %>" type="video/mp4" />
+        Your browser does not support video.
+      </video>
+    <% } else { %>
+      <img src="<%= blog.coverImageURL %>" class="card-img-top" />
+    <% } %>
+  <% } %>
+
+  <div class="card-body">
+    <h4 class="card-title"><%= blog.title %></h4>
+    <p class="card-text"><%= blog.body.substring(0, 200) %>...</p>
+
+    <% if (user && blog.createdBy._id.toString() === user._id.toString()) { %>
+      <div class="d-flex gap-2">
+        <a href="/blog/edit/<%= blog._id %>" class="btn btn-sm btn-success">✏️ Edit</a>
+        <form action="/blog/delete/<%= blog._id %>" method="POST">
+          <button type="submit" class="btn btn-sm btn-danger">🗑️ Delete</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+</div>
