@@ -8,7 +8,7 @@ const blogRouter =require("./routes/blog.js")
 const {Blog}=require("./models/blog.js")
 
 const mongoose=require("mongoose")
-mongoose.connect(process.env.MONGO_URL).then(e=>console.log("mongodb connected"))
+mongoose.connect(process.env.MONGODB_CONNECT_URL).then(e=>console.log("mongodb connected"))
 
 const PORT=process.env.PORT||8000;
 const cookieParser =require("cookie-parser");
