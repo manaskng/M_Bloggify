@@ -20,7 +20,7 @@ const upload = multer({ storage: storage });
 // Show blog creation form
 router.get("/add-new", (req, res) => {
   if (!req.user) return res.redirect("/user/signin");
-  return res.render("addBlog", {
+  return res.render("addblog", {
     user: req.user,
   });
 });
