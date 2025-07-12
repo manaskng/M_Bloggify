@@ -1,4 +1,4 @@
-<img width="1899" height="844" alt="Screenshot 2025-07-12 190529" src="https://github.com/user-attachments/assets/dd7e9008-c741-4a8c-bc73-7d4420136a72" />📝 Blogging Platform (JWT AUTHENTICATION)
+📝 Blogging Platform (JWT AUTHENTICATION)
 A full-stack blogging platform built with Node.js, Express, MongoDB, and EJS templating. Users can sign up, create, edit, delete blogs, and view others' blogs — all wrapped in a responsive UI.
 
 🚀 Features
