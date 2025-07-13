@@ -12,10 +12,12 @@ const blogSchema=new mongoose.Schema({
         type:String,
 
     },
+    endorses: { type: Number, default: 0 }, 
     createdBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"user"
-    }
+    },
+    endorsedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }]
 },{
     timestamps:true,
 })

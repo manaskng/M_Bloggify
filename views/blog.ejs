@@ -3,27 +3,90 @@
 <head>
   <%- include("./partials/head") %>
   <title><%= blog.title %></title>
+  <style>
+    /* Blog image: fit entirely without cropping */
+    .blog-cover-img {
+      max-height: 300px;
+      width: 100%;
+      object-fit: contain;
+      border-radius: 0.5rem 0.5rem 0 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      background-color: #f8f9fa; /* light bg to prevent empty space */
+    }
+
+    .author-info {
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+
+    .author-info a {
+      font-weight: 600;
+      color: #0d6efd;
+      text-decoration: none;
+    }
+    .author-info a:hover {
+      text-decoration: underline;
+    }
+
+    .blog-content {
+      white-space: pre-line;
+      line-height: 1.6;
+      font-size: 1.05rem;
+    }
+
+    .back-btn {
+      margin-top: 20px;
+    }
+
+    .tag-badge {
+      background-color: #0d6efd;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      user-select: none;
+    }
+  </style>
 </head>
 <body>
   <%- include("./partials/nav") %>
 
-  <div class="container mt-5">
-    <div class="card shadow-lg">
-      <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="Blog Cover">
+  <main class="container mt-4">
+    <div class="card shadow-lg rounded">
+      <img 
+        src="<%= blog.coverImageURL || '/images/blog.png' %>" 
+        alt="Blog Cover" 
+        class="blog-cover-img"
+      />
+
       <div class="card-body">
-        <h2 class="card-title"><%= blog.title %></h2>
-        <p class="text-muted">
-          By 
-          <a href="/blog/user/<%= blog.createdBy._id %>/blogs" class="text-decoration-none">
-            <strong><%= blog.createdBy.name %></strong>
-          </a>
-        </p>
-        <p class="card-text mt-4" style="white-space: pre-line;"><%= blog.body %></p>
-        <a href="/" class="btn btn-secondary mt-3">← Back to Home</a>
+        <h2 class="card-title mb-3"><%= blog.title %></h2>
+
+        <div class="author-info">
+          
+          <span>  Published on <%= new Date(blog.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) %></span>
+        </div>
+
+        <% if(blog.tags && blog.tags.length) { %>
+          <div class="mb-3">
+            <% blog.tags.forEach(tag => { %>
+              <span class="tag-badge"><%= tag %></span>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <p class="blog-content"><%= blog.body %></p>
+
+        <a href="/" class="btn btn-secondary back-btn">← Back to Home</a>
       </div>
     </div>
-  </div>
+  </main>
 
+  <!-- Include the AI Sidebar partial -->
+  <%- include('./partials/aiSidebar') %>
+  <%- include('./partials/footer') %>
   <%- include("./partials/script") %>
 </body>
 </html>

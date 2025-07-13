@@ -7,7 +7,7 @@
 <body>
   <%- include("./partials/nav") %>
 
-  <div class="container mt-4">
+  <main class="container mt-4">
     <h2 class="mb-4 text-center">Blogs by <%= userName %></h2>
 
     <% if (blogs.length === 0) { %>
@@ -25,7 +25,8 @@
               Your browser does not support the video tag.
             </video>
           <% } else { %>
-            <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="cover" />
+           <img src="<%= blog.coverImageURL || '/images/blog.png' %>" class="card-img-top" alt="Blog Cover">
+
           <% } %>
         <% } %>
 
@@ -50,7 +51,11 @@
 </div>
 
     <% } %>
-  </div>
+</main>
+   <!-- Include the AI Sidebar partial -->
+  <%- include('./partials/aiSidebar') %>
+  <%- include('./partials/footer') %>
+
 
   <%- include("./partials/script") %>
 </body>

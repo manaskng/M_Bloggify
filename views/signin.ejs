@@ -1,36 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <%- include("./partials/head") %>
-    <title>SignIn page</title>
+  <%- include('./partials/head') %>
+  <title>Sign In</title>
+  <style>
+    .auth-wrapper {
+      min-height: calc(100vh - 56px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f4f6f8;
+      padding: 40px 10px;
+    }
+
+    .auth-card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .auth-card h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #0d6efd;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome ,Please SignIn</h1>
-    </header>
-    <main>
-      <%- include("./partials/nav") %>  
-    </main>
-    <%- include("./partials/script") %>
-    <div class ="container" mt-4>
+  <%- include('./partials/nav') %>
 
-        <form action ="/user/signin" method="POST">
-   
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <h2>Sign In</h2>
+      <form action="/user/signin" method="POST">
+        <div class="mb-3">
+          <label for="email" class="form-label">Email address</label>
+          <input type="email" name="email" class="form-control" id="email" required>
+          <div class="form-text">We'll never share your email with anyone else.</div>
+        </div>
+
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" id="password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+      </form>
+
+      <p class="mt-3 text-center small">
+        Don't have an account?
+        <a href="/user/signup" class="text-primary fw-semibold">Sign Up</a>
+      </p>
+    </div>
   </div>
-  <div class="mb-3">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password"  name ="password" class="form-control" id="exampleInputPassword1">
-    </div>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-    </div>
-    <footer>
-        <p>&copy; 2025 Your Name. All rights reserved.</p>
-    </footer>
+  <%- include('./partials/footer') %>
+  <%- include('./partials/script') %>
 </body>
 </html>

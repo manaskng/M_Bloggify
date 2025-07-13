@@ -9,7 +9,18 @@
   body {
     background-color: #f4f6f8;
     font-family: 'Segoe UI', sans-serif;
+
+    /* NEW 👇 */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
   }
+
+  main {
+    flex: 1;
+  }
+
   .card {
     transition: transform 0.2s;
   }
@@ -17,3 +28,4 @@
     transform: scale(1.03);
   }
 </style>
+

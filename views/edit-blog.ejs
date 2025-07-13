@@ -6,26 +6,53 @@
 </head>
 <body>
   <%- include("./partials/nav") %>
-  <div class="container mt-4">
+  <main  class="container mt-4">
     <h2>Edit Blog</h2>
-    <form action="/blog/edit/<%= blog._id %>" method="POST">
+
+    <!--  enctype added for file upload -->
+    <form action="/blog/edit/<%= blog._id %>" method="POST" enctype="multipart/form-data">
+      
+      <!-- Title -->
       <div class="mb-3">
         <label>Title</label>
         <input name="title" class="form-control" value="<%= blog.title %>" required />
       </div>
 
+      <!-- Body -->
       <div class="mb-3">
         <label>Content</label>
-        <textarea name="body" class="form-control" rows="6"><%= blog.body %></textarea>
+        <textarea name="body" class="form-control" rows="6" required><%= blog.body %></textarea>
       </div>
 
+      <!-- ✅ Preview current image -->
+      <% if (blog.coverImageURL) { %>
+        <div class="mb-3">
+          <label>Current Cover Image</label><br />
+          <img src="<%= blog.coverImageURL %>" alt="Cover" style="max-width: 200px; margin-bottom: 10px;" />
+        </div>
+      <% } %>
+
+      <!-- ✅ Upload new image -->
       <div class="mb-3">
-        <label>Cover Image URL</label>
+        <label>Upload New Cover Image</label>
+        <input type="file" name="coverImage" class="form-control" accept="image/*" />
+      </div>
+
+      <!-- ❌ Remove this if switching to file-based only -->
+      <!-- 
+      <div class="mb-3">
+        <label>Cover Image URL (if applicable)</label>
         <input name="coverImageURL" class="form-control" value="<%= blog.coverImageURL %>" />
       </div>
+      -->
 
       <button type="submit" class="btn btn-primary">Update Blog</button>
     </form>
-  </div>
+  </main>
+   <!-- Include the AI Sidebar partial -->
+  <%- include('./partials/aiSidebar') %>
+
+  <%- include('./partials/footer') %>
+
 </body>
 </html>

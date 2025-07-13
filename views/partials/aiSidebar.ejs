@@ -1,0 +1,151 @@
+<!-- Toggle Button -->
+ <!-- only allow access of toggle button if loggedin-->
+<button id="toggleAiBtn" 
+  <% if (user) { %>
+    onclick="toggleAISidebar()"
+    style="cursor:pointer;"
+    title="Use AI Assistant"
+  <% } else { %>
+    onclick="alert('Please log in first to use the AI Assistant')"
+    style="cursor:not-allowed;"
+    title="Please log in to use AI Assistant"
+  <% } %>
+>
+  Use AI Assistant
+</button>
+
+
+
+<!-- Gemini AI Sidebar -->
+<div id="aiSidebar">
+  <h5 class="mb-3">🧠 Gemini AI Assistant</h5>
+
+  <select id="aiAction" class="form-select form-select-sm mb-2">
+    <option value="describe">Generate Description</option>
+    <option value="summarize">Summarize</option>
+    <option value="improve">Improve Writing</option>
+  </select>
+
+  <textarea id="aiInput" class="form-control form-control-sm mb-2" rows="5" placeholder="Paste blog title or content..."></textarea>
+
+  <button class="btn w-100 mb-2" onclick="runGemini()">Generate ✨</button>
+
+  <div id="aiOutput" class="border rounded p-2 bg-dark text-white small" style="min-height: 100px;"></div>
+</div>
+
+<style>
+  #aiSidebar {
+    position: fixed;
+    top: 60px;
+    right: 0;
+    width: 280px;
+    height: 80vh;
+    background-color: #212529;
+    color: white;
+    padding: 15px;
+    overflow-y: auto;
+    z-index: 999;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    font-size: 0.9rem;
+    border-left: 3px solid #0d6efd;
+    border-radius: 12px 0 0 12px;
+    transition: transform 0.3s ease-in-out;
+    transform: translateX(100%);
+  }
+
+  #aiSidebar h5 {
+    font-weight: bold;
+    font-size: 1rem;
+    color: #0d6efd;
+  }
+
+  #aiSidebar select,
+  #aiSidebar textarea {
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  #aiSidebar button {
+    font-size: 0.9rem;
+    border-radius: 30px;
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+
+  #aiSidebar button:hover {
+    background-color: #0b5ed7;
+  }
+
+  #toggleAiBtn {
+    position: fixed;
+    top: 65px;
+    right: 10px;
+    z-index: 1000;
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: right 0.3s ease;
+  }
+
+  #toggleAiBtn:hover {
+    background-color: #0b5ed7;
+  }
+
+  /* Push button left when sidebar is visible */
+  .sidebar-visible #toggleAiBtn {
+    right: 300px;
+  }
+
+  @media (max-width: 768px) {
+    #aiSidebar {
+      width: 100%;
+      height: auto;
+      bottom: 0;
+      top: auto;
+      border-radius: 12px 12px 0 0;
+      transform: translateY(100%);
+    }
+
+    #toggleAiBtn {
+      bottom: 65px;
+      top: auto;
+    }
+
+    .sidebar-visible #toggleAiBtn {
+      right: 10px;
+    }
+  }
+</style>
+
+<script>
+  function toggleAISidebar() {
+    const sidebar = document.getElementById('aiSidebar');
+    const button = document.getElementById('toggleAiBtn');
+    const body = document.body;
+
+    const isVisible = sidebar.style.transform === 'translateX(0%)' || sidebar.style.transform === '';
+
+    if (isVisible) {
+      sidebar.style.transform = 'translateX(100%)';
+      button.textContent = 'Use AI Assistant';
+      body.classList.remove('sidebar-visible');
+    } else {
+      sidebar.style.transform = 'translateX(0%)';
+      button.textContent = 'Hide AI Assistant';
+      body.classList.add('sidebar-visible');
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('aiSidebar').style.transform = 'translateX(100%)';
+  });
+</script>

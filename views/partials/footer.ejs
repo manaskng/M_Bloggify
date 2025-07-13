@@ -1,0 +1,32 @@
+<!-- views/partials/footer.ejs -->
+
+<style>
+  #footer {
+    background-color: #212529; /* same dark bg as sidebar */
+    color: white;
+    text-align: center;
+    padding: 15px 10px;
+    border-top: 3px solid #0d6efd; /* matching blue border */
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 10;
+  }
+
+  #footer a {
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  #footer a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<footer id="footer" role="contentinfo">
+  <div>
+    &copy; <%= new Date().getFullYear() %> M_Bloggify. All rights reserved. |
+    <a href="/about">About</a> |
+    <a href="/contact">Contact</a>
+  </div>
+</footer>

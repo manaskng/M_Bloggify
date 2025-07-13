@@ -6,7 +6,7 @@
 <body>
   <%- include("./partials/nav") %>
 
-  <div class="container mt-4">
+  <main  class="container mt-4">
     <h2>Search results for "<%= query %>"</h2>
 
     <% if (blogs.length === 0 && users.length === 0) { %>
@@ -34,7 +34,9 @@
         </div>
       <% }) %>
     <% } %>
-  </div>
+      </main>
+  <%- include('./partials/footer') %>
+
 
   <%- include("./partials/script") %>
 </body>
