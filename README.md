@@ -45,9 +45,8 @@ The app is deployed and live at:
 ## 📸 Screenshots
 
 Here are some screenshots showcasing the key features of the application:
-
-<img width="1864" height="823" alt="Screenshot 2025-07-12 221303" src="https://github.com/user-attachments/assets/792a5512-7377-4d74-93d1-850c4a7e53da" />
-<img width="1899" height="844" alt="Screenshot 2025-07-12 190529" src="https://github.com/user-attachments/assets/6831d908-c638-4484-8c6f-3f8cc28d1431" />
+<img width="1892" height="657" alt="Screenshot 2025-07-13 172145" src="https://github.com/user-attachments/assets/9ea94f84-1694-4ae0-b409-478bfdbf3efd" />
+<img width="365" height="467" alt="Screenshot 2025-07-13 180820" src="https://github.com/user-attachments/assets/695b1931-632f-44cb-b164-9c6d8dd24a43" />
 <img width="1899" height="844" alt="Screenshot 2025-07-12 190529" src="https://github.com/user-attachments/assets/744adaa2-bc98-4a03-80ff-32bcd8b24ede" />
 <img width="1905" height="578" alt="Screenshot 2025-06-30 110405" src="https://github.com/user-attachments/assets/61779368-da8c-4003-a4ad-2e541de633b4" />
 <img width="1879" height="868" alt="Screenshot 2025-06-30 110221" src="https://github.com/user-attachments/assets/2795fb92-a521-475b-98c6-bb47e58d5380" />
