@@ -5,98 +5,116 @@
   <title>HomePage</title>
 
   <style>
-  .card:hover {
-    box-shadow: 0 6px 20px rgba(13, 110, 253, 0.15);
-    transform: translateY(-2px);
-  }
-  /* Your existing styles can stay here */
+    .card:hover {
+      box-shadow: 0 6px 20px rgba(13, 110, 253, 0.15);
+      transform: translateY(-2px);
+      transition: all 0.2s ease;
+    }
+
+    /* Floating Add Blog Button */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background-color: #0a3d91;
+      color: white;
+      font-size: 32px;
+      border-radius: 50%;
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 6px 15px rgba(10, 61, 145, 0.35);
+      z-index: 1000;
+    }
+
+    .fab:hover {
+      background-color: #08306b;
+      transform: scale(1.05);
+    }
+
+    /* NEW badge */
+    .new-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #ef4444;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 999px;
+      z-index: 10;
+    }
+
+    /* Sorting bar */
+    .sorting-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .sorting-select {
+      max-width: 220px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 768px) {
+      .fab {
+        bottom: 20px;
+        right: 20px;
+      }
+
+      .sorting-bar {
+        justify-content: center;
+      }
+    }
   </style>
 </head>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".endorse-form").forEach(form => {
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const blogId = this.dataset.blogId;
-        const button = this.querySelector("button");
-        const badge = this.querySelector(".endorse-count");
-
-        try {
-          const res = await fetch(`/blog/${blogId}/endorse`, {
-            method: "POST"
-          });
-
-          const data = await res.json();
-
-          if (data.endorsed) {
-            button.classList.remove("btn-outline-primary");
-            button.classList.add("btn-secondary", "disabled");
-            badge.innerText = data.count;
-          }
-        } catch (err) {
-          console.error("Error endorsing blog:", err);
-        }
-      });
-    });
-  });
-
-  async function runGemini() {
-    const prompt = document.getElementById('aiInput').value.trim();
-    const action = document.getElementById('aiAction').value;
-    const output = document.getElementById('aiOutput');
-
-    if (!prompt) {
-      return alert('Please enter some text!');
-    }
-
-    output.innerHTML = '<em>Generating...</em>';
-
-    try {
-      const res = await fetch('/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt, action })
-      });
-      const data = await res.json();
-      output.textContent = data.text || 'No response';
-    } catch (err) {
-      console.error(err);
-      output.innerHTML = '<span class="text-danger">Generation failed</span>';
-    }
-  }
-</script>
 
 <body>
   <%- include("./partials/nav") %>
 
   <main class="container mt-4">
-     <h2 class="mb-4 text-center">🌟 Latest Blogs</h2>
+
+    <h2 class="mb-3 text-center">🌟 Latest Blogs</h2>
+
+    <!-- Sorting Dropdown -->
+    <div class="sorting-bar">
+      <select
+        class="form-select sorting-select"
+        onchange="location = this.value;"
+      >
+        <option value="/?sort=latest" <%= sort === 'latest' ? 'selected' : '' %>>
+          Sort by: Latest
+        </option>
+        <option value="/?sort=endorsed" <%= sort === 'endorsed' ? 'selected' : '' %>>
+          Sort by: Most Endorsed
+        </option>
+      </select>
+    </div>
 
     <% if (!user) { %>
-      <div class="card mb-4 shadow-sm border border-5" 
-           style="border-color: #0a3d91; background: linear-gradient(90deg, #e7f1ff 0%, #ffffff 100%);">
+      <div
+        class="card mb-4 shadow-sm border border-5"
+        style="border-color: #0a3d91; background: linear-gradient(90deg, #e7f1ff 0%, #ffffff 100%);"
+      >
         <div class="card-body row align-items-center g-3">
           <div class="col-md-8">
-            <h4 class="card-title text-primary mb-2 fw-bold">
-              <span style="color:#0a3d91;"> Welcome to M_bloggify</span>
+            <h4 class="fw-bold" style="color:#0a3d91;">
+              Welcome to M_bloggify
             </h4>
-            <p class="card-text text-secondary mb-0" style="font-size: 1.05rem;">
-              Create your own <strong>blogs</strong>, <strong>endorse content</strong>, or <strong>comment</strong>.  
-              Please <a href="/user/signin" class="text-primary fw-semibold text-decoration-underline">Log in</a> or 
-              <a href="/user/signup" class="text-primary fw-semibold text-decoration-underline">Sign up</a> to get started.
+            <p class="text-secondary">
+              Create blogs, endorse ideas, and explore content built by the community.
             </p>
           </div>
           <div class="col-md-4 text-md-end">
-            <a href="/user/signin" class="btn btn-outline-primary me-2 px-4 py-2 fw-semibold" 
-               style="border-color: #0a3d91; color: #0a3d91; border-radius: 30px;"
-               onmouseover="this.style.backgroundColor='#0a3d91'; this.style.color='#fff';"
-               onmouseout="this.style.backgroundColor='transparent'; this.style.color='#0a3d91';">
+            <a href="/user/signin" class="btn btn-outline-primary me-2 px-4 py-2 fw-semibold rounded-pill">
               Login
             </a>
-            <a href="/user/signup" class="btn px-4 py-2 fw-semibold" 
-               style="background-color: #0a3d91; color: white; border-radius: 30px; border: none;">
+            <a href="/user/signup" class="btn px-4 py-2 fw-semibold rounded-pill" style="background-color:#0a3d91; color:white;">
               Sign Up
             </a>
           </div>
@@ -107,63 +125,38 @@
     <% if (blogs.length === 0) { %>
       <p class="text-center">No blogs found.</p>
     <% } else { %>
+
       <div class="row">
         <% blogs.forEach(blog => { 
-            const alreadyEndorsed = blog.endorsedBy?.some(id => id.toString() === user?._id?.toString());
+          const isNew =
+            Date.now() - new Date(blog.createdAt).getTime() <
+            24 * 60 * 60 * 1000;
         %>
-          <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm">
 
-              <% if (blog.coverImageURL) { %>
-                <% if (blog.coverImageURL.endsWith(".mp4")) { %>
-                  <video class="card-img-top" controls>
-                    <source src="<%= blog.coverImageURL %>" type="video/mp4" />
-                    Your browser does not support video.
-                  </video>
-                <% } else { %>
-                  <img src="<%= blog.coverImageURL %>" class="card-img-top" alt="cover" />
-                <% } %>
-              <% } else { %>
-                <img src="/images/blog.png" class="card-img-top" alt="default cover" />
-              <% } %>
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4 position-relative">
 
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><%= blog.title %></h5>
-                <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
+            <% if (isNew) { %>
+              <span class="new-badge">NEW</span>
+            <% } %>
 
-                <div class="mt-auto d-flex flex-wrap gap-2">
-                  <a href="/blog/<%= blog._id %>" class="btn btn-sm btn-primary">Read More</a>
+            <!-- Reusable blog card with endorse -->
+            <%- include("./partials/blog-card", { blog, user }) %>
 
-                  <% if (user) { %>
-                    <form class="endorse-form" data-blog-id="<%= blog._id %>">
-                      <button type="submit" class="btn btn-sm <%= alreadyEndorsed ? 'btn-secondary disabled' : 'btn-outline-primary' %>">
-                        🌟 Endorse <span class="badge bg-dark endorse-count"><%= blog.endorses || 0 %></span>
-                      </button>
-                    </form>
-                  <% } %>
-
-                  <% if (user && blog.createdBy._id.toString() === user._id.toString()) { %>
-                    <a href="/blog/edit/<%= blog._id %>" class="btn btn-sm btn-success">✏️ Edit</a>
-                    <form action="/blog/delete/<%= blog._id %>" method="POST">
-                      <button type="submit" class="btn btn-sm btn-danger">🗑️ Delete</button>
-                    </form>
-                  <% } %>
-                </div>
-              </div>
-            </div>
           </div>
         <% }) %>
       </div>
-    <% } %>
 
+    <% } %>
   </main>
 
-  <!-- Include the AI Sidebar partial -->
+  <% if (user) { %>
+    <a href="/blog/add-new" class="fab" title="Add Blog">
+      +
+    </a>
+  <% } %>
+
   <%- include('./partials/aiSidebar') %>
   <%- include('./partials/footer') %>
-
-  
-
   <%- include("./partials/script") %>
 </body>
 </html>

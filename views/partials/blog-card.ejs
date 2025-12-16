@@ -1,26 +1,100 @@
-<div class="card mb-4 shadow-sm">
+<div class="card h-100 shadow-sm border-0 blog-card">
+
+  <!-- Cover -->
   <% if (blog.coverImageURL) { %>
     <% if (blog.coverImageURL.endsWith(".mp4")) { %>
       <video class="card-img-top" controls>
         <source src="<%= blog.coverImageURL %>" type="video/mp4" />
-        Your browser does not support video.
       </video>
     <% } else { %>
       <img src="<%= blog.coverImageURL %>" class="card-img-top" />
     <% } %>
+  <% } else { %>
+    <img src="/images/blog.png" class="card-img-top" />
   <% } %>
 
-  <div class="card-body">
-    <h4 class="card-title"><%= blog.title %></h4>
-    <p class="card-text"><%= blog.body.substring(0, 200) %>...</p>
+  <div class="card-body d-flex flex-column">
 
-    <% if (user && blog.createdBy._id.toString() === user._id.toString()) { %>
-      <div class="d-flex gap-2">
-        <a href="/blog/edit/<%= blog._id %>" class="btn btn-sm btn-success">✏️ Edit</a>
-        <form action="/blog/delete/<%= blog._id %>" method="POST">
-          <button type="submit" class="btn btn-sm btn-danger">🗑️ Delete</button>
+    <h5 class="card-title fw-semibold">
+      <%= blog.title %>
+    </h5>
+
+    <p class="card-text text-secondary">
+      <%= blog.body.substring(0, 140) %>...
+    </p>
+
+    <div class="mt-auto d-flex flex-wrap gap-2 align-items-center">
+
+      <a href="/blog/<%= blog._id %>" class="btn btn-sm btn-primary">
+        Read More
+      </a>
+
+      <% if (user) { 
+        const alreadyEndorsed =
+          blog.endorsedBy?.some(
+            id => id.toString() === user._id.toString()
+          );
+      %>
+        <form class="endorse-form" data-blog-id="<%= blog._id %>">
+          <button
+            type="submit"
+            class="btn btn-sm <%= alreadyEndorsed ? 'btn-secondary disabled' : 'btn-outline-primary' %>"
+          >
+            🌟
+            <span class="badge bg-dark endorse-count">
+              <%= blog.endorses || 0 %>
+            </span>
+          </button>
         </form>
-      </div>
-    <% } %>
+      <% } %>
+
+      <% if (user && blog.createdBy._id.toString() === user._id.toString()) { %>
+
+        <a href="/blog/edit/<%= blog._id %>" class="btn btn-sm btn-outline-success">
+          ✏️ Edit
+        </a>
+
+        <form
+          action="/blog/delete/<%= blog._id %>"
+          method="POST"
+          onsubmit="return confirm('Are you sure you want to delete this blog?');"
+        >
+          <button type="submit" class="btn btn-sm btn-outline-danger">
+            🗑️ Delete
+          </button>
+        </form>
+
+      <% } %>
+
+    </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".endorse-form").forEach(form => {
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const blogId = this.dataset.blogId;
+        const button = this.querySelector("button");
+        const badge = this.querySelector(".endorse-count");
+
+        try {
+          const res = await fetch(`/blog/${blogId}/endorse`, {
+            method: "POST"
+          });
+          const data = await res.json();
+
+          if (data.endorsed) {
+            button.classList.remove("btn-outline-primary");
+            button.classList.add("btn-secondary", "disabled");
+            badge.innerText = data.count;
+          }
+        } catch (err) {
+          console.error("Endorse failed", err);
+        }
+      });
+    });
+  });
+</script>

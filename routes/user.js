@@ -3,21 +3,18 @@ const { User } = require("../models/user");
 const { Blog } = require("../models/blog");
 
 const router = Router();
-// As we are using nav in our signin and signout which may or maynot be in our signin or signout page
 
+// Sign In page
 router.get("/signin", (req, res) => {
-    return res.render("signin", { user: req.user || null });
+  return res.render("signin", { user: req.user || null });
 });
 
+// Sign Up page
 router.get("/signup", (req, res) => {
-    return res.render("signup", { user: req.user || null });
+  return res.render("signup", { user: req.user || null });
 });
 
-
-
-
-
-// POST: Sign In User
+// POST: Sign In
 router.post("/signin", async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -26,11 +23,12 @@ router.post("/signin", async (req, res) => {
   } catch (error) {
     return res.render("signin", {
       error: "Incorrect email or password",
+      user: null,
     });
   }
 });
 
-// POST: Sign Up User
+// POST: Sign Up
 router.post("/signup", async (req, res) => {
   const { fullname, email, password } = req.body;
   const user = new User({ fullname, email, password });
@@ -38,13 +36,13 @@ router.post("/signup", async (req, res) => {
   return res.redirect("/user/signin");
 });
 
-// GET: Logout User
+// Logout
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   return res.redirect("/user/signin");
 });
 
-// GET: Blogs by specific user
+// ✅ Blogs by specific user (FIXED)
 router.get("/:id/blogs", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -54,18 +52,22 @@ router.get("/:id/blogs", async (req, res) => {
       return res.render("userBlogs", {
         blogs: [],
         userName: "This user hasn't posted any blogs yet.",
+        user: req.user, // ✅ FIX
       });
     }
 
     return res.render("userBlogs", {
       blogs,
       userName: blogs[0].createdBy.fullname,
+      user: req.user, // ✅ FIX
     });
   } catch (error) {
     console.log("Error fetching blogs:", error.message);
     return res.redirect("/");
   }
 });
+
+// Search
 router.get("/search", async (req, res) => {
   const query = req.query.q;
 
@@ -91,9 +93,6 @@ router.get("/search", async (req, res) => {
     console.error("Search error:", err);
     res.status(500).send("Error performing search");
   }
-  
-
 });
-
 
 module.exports = router;

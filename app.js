@@ -11,17 +11,14 @@ const blogRoutes = require("./routes/blog.js");
 const aiRoutes = require('./routes/ai');
 const { Blog } = require("./models/blog.js");
 
-// ✅ 1. Connect MongoDB
 mongoose.connect(process.env.MONGODB_CONNECT_URL)
   .then(() => console.log(" MongoDB connected"))
   .catch(err => console.error(" MongoDB connection error:", err));
 
-// ✅ 2. View Engine
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-// ✅ 3. Middlewares
-app.use(express.json()); // ✅ THIS is required for req.body to work with JSON POST
+app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve("./public")));
 app.use(cookieParser());
@@ -32,20 +29,33 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ 4. Routes
 app.use("/user", userRoutes);
 app.use("/blog", blogRoutes);
 app.use("/", aiRoutes);
 
-// ✅ 5. Home Route
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 app.get("/", async (req, res) => {
-  const allBlogs = await Blog.find({}).populate("createdBy");
+  const sort = req.query.sort || "latest";
+
+  let sortQuery =
+    sort === "endorsed"
+      ? { endorses: -1 }
+      : { createdAt: -1 };
+
+  const blogs = await Blog.find({})
+    .populate("createdBy")
+    .sort(sortQuery);
+
   res.render("home", {
-    blogs: allBlogs
+    blogs,
+    sort
   });
 });
 
-// ✅ 6. Server Start
+
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(` Server running on PORT: ${PORT}`);

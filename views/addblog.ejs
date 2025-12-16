@@ -1,27 +1,77 @@
 <%- include("./partials/head") %>
 <%- include("./partials/nav") %>
 
-<main class="container mt-4">
-   <h2>Create a New Blog</h2>
-  <form action="/blog/add-new" method="POST" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label class="form-label">Title</label>
-      <input type="text" class="form-control" name="title" required />
+<main class="container mt-5">
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+
+          <h2 class="mb-4 text-center" style="color:#0a3d91;">
+            Create a New Blog
+          </h2>
+
+          <form action="/blog/add-new" method="POST" enctype="multipart/form-data">
+
+            <!-- Title -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Title</label>
+              <input
+                type="text"
+                class="form-control rounded-pill px-4"
+                name="title"
+                required
+              />
+            </div>
+
+            <!-- Content -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Content</label>
+              <textarea
+                class="form-control rounded-4 px-4 py-3"
+                name="body"
+                rows="7"
+                required
+              ></textarea>
+            </div>
+
+            <!-- Cover -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">Cover Image (optional)</label>
+              <input
+                type="file"
+                class="form-control rounded-pill px-3"
+                name="coverImage"
+                accept="image/*"
+              />
+            </div>
+
+            <!-- Actions -->
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <a href="/" class="btn btn-outline-secondary rounded-pill px-4">
+                ← Back to Home
+              </a>
+
+              <button
+                type="submit"
+                class="btn btn-primary rounded-pill px-5"
+                style="background-color:#0a3d91; border:none;"
+              >
+                Publish Blog
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
     </div>
-    <div class="mb-3">
-      <label class="form-label">Content</label>
-      <textarea class="form-control" name="body" rows="6" required></textarea>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Cover Image (optional)</label>
-      <input type="file" class="form-control" name="coverImage" accept="image/*" />
-    </div>
-    <button type="submit" class="btn btn-primary">Post</button>
-  </form>
+  </div>
 </main>
- <!-- Include the AI Sidebar partial -->
-  <%- include('./partials/aiSidebar') %>
-  <%- include('./partials/footer') %>
 
-
+<%- include('./partials/aiSidebar') %>
+<%- include('./partials/footer') %>
 <%- include("./partials/script") %>

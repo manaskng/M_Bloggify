@@ -1,31 +1,143 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/">M_Bloggify</a>
 
-    <form class="d-flex me-auto ms-3" action="/user/search" method="GET">
-      <input class="form-control me-2" type="search" name="q" placeholder="Search blogs or users" aria-label="Search" />
-      <button class="btn btn-outline-light" type="submit">Search</button>
-    </form>
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold" href="/">
+      M_Bloggify
+    </a>
 
-    <ul class="navbar-nav ms-auto">
-      <% if (user) { %>
-        <li class="nav-item">
-          <a class="nav-link" href="/blog/add-new">Add Blog</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/<%= user._id %>/blogs"><%= user.fullname %></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/logout">Logout</a>
-        </li>
-      <% } else { %>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/signin">Sign In</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/user/signup">Sign Up</a>
-        </li>
-      <% } %>
-    </ul>
+    <!-- Mobile Toggle -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#mainNavbar"
+      aria-controls="mainNavbar"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Content -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+
+      <!-- Search Wrapper -->
+      <div class="d-flex justify-content-center flex-grow-1 my-3 my-lg-0">
+        <form
+          class="search-form d-flex"
+          action="/user/search"
+          method="GET"
+        >
+          <input
+            class="form-control search-input"
+            type="search"
+            name="q"
+            placeholder="Search blogs or users"
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-light search-btn" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+
+      <!-- User Area (ALWAYS RIGHT) -->
+      <div class="user-area ms-lg-auto mt-3 mt-lg-0">
+        <% if (user) { %>
+
+          <!-- My Blogs -->
+          <a
+            href="/user/<%= user._id %>/blogs"
+            class="btn btn-outline-light btn-sm rounded-pill px-3"
+          >
+            My Blogs
+          </a>
+
+          <!-- Username -->
+          <span class="username-pill">
+            <%= user.fullname %>
+          </span>
+
+          <!-- Logout -->
+          <a href="/user/logout" class="logout-btn">
+            Logout
+          </a>
+
+        <% } else { %>
+
+          <a href="/user/signin" class="btn btn-outline-light btn-sm me-2">
+            Sign In
+          </a>
+          <a href="/user/signup" class="btn btn-primary btn-sm">
+            Sign Up
+          </a>
+
+        <% } %>
+      </div>
+
+    </div>
   </div>
+
+  <!-- Inline navbar-specific styles -->
+  <style>
+    /* Search bar styling */
+    .search-form {
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .search-input {
+      border-radius: 999px;
+      padding-left: 16px;
+    }
+
+    .search-btn {
+      border-radius: 999px;
+      margin-left: 8px;
+      padding: 6px 16px;
+    }
+
+    /* User area */
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .username-pill {
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .logout-btn {
+      background-color: #ef4444;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .logout-btn:hover {
+      background-color: #dc2626;
+    }
+
+    @media (max-width: 992px) {
+      .user-area {
+        justify-content: flex-end;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .search-form {
+        max-width: 100%;
+      }
+    }
+  </style>
 </nav>

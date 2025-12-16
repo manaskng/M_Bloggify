@@ -1,92 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <%- include("./partials/head") %>
   <title><%= blog.title %></title>
+
   <style>
-    /* Blog image: fit entirely without cropping */
-    .blog-cover-img {
-      max-height: 300px;
-      width: 100%;
-      object-fit: contain;
-      border-radius: 0.5rem 0.5rem 0 0;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      background-color: #f8f9fa; /* light bg to prevent empty space */
+    /* Reading container */
+    .blog-wrapper {
+      max-width: 860px;
+      margin: auto;
     }
 
-    .author-info {
-      margin-bottom: 15px;
+    /* Cover image */
+    .blog-cover-img {
+      max-height: 360px;
+      width: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      background-color: #f8f9fa;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    }
+
+    /* Title */
+    .blog-title {
+      font-size: 2.1rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #212529;
+    }
+
+    /* Meta info */
+    .blog-meta {
       font-size: 0.9rem;
       color: #6c757d;
     }
 
-    .author-info a {
-      font-weight: 600;
-      color: #0d6efd;
-      text-decoration: none;
-    }
-    .author-info a:hover {
-      text-decoration: underline;
-    }
-
+    /* Blog content */
     .blog-content {
       white-space: pre-line;
-      line-height: 1.6;
+      line-height: 1.75;
       font-size: 1.05rem;
+      color: #343a40;
     }
 
-    .back-btn {
-      margin-top: 20px;
-    }
-
+    /* Tags */
     .tag-badge {
-      background-color: #0d6efd;
+      background-color: #0a3d91;
       color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
+      padding: 6px 14px;
+      border-radius: 999px;
       font-size: 0.8rem;
-      margin-right: 5px;
-      user-select: none;
+      margin-right: 6px;
+    }
+
+    /* Action bar */
+    .blog-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .blog-title {
+        font-size: 1.7rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <%- include("./partials/nav") %>
 
-  <main class="container mt-4">
-    <div class="card shadow-lg rounded">
-      <img 
-        src="<%= blog.coverImageURL || '/images/blog.png' %>" 
-        alt="Blog Cover" 
-        class="blog-cover-img"
+  <main class="container mt-5">
+    <div class="blog-wrapper">
+
+      <!-- Cover -->
+      <img
+        src="<%= blog.coverImageURL || '/images/blog.png' %>"
+        alt="Blog Cover"
+        class="blog-cover-img mb-4"
       />
 
-      <div class="card-body">
-        <h2 class="card-title mb-3"><%= blog.title %></h2>
+      <!-- Title -->
+      <h1 class="blog-title mb-2">
+        <%= blog.title %>
+      </h1>
 
-        <div class="author-info">
-          
-          <span>  Published on <%= new Date(blog.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }) %></span>
+      <!-- Meta -->
+      <div class="blog-meta mb-3">
+        Published on
+        <strong>
+          <%= new Date(blog.createdAt).toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+          }) %>
+        </strong>
+      </div>
+
+      <!-- Tags -->
+      <% if (blog.tags && blog.tags.length) { %>
+        <div class="mb-4">
+          <% blog.tags.forEach(tag => { %>
+            <span class="tag-badge"><%= tag %></span>
+          <% }) %>
         </div>
+      <% } %>
 
-        <% if(blog.tags && blog.tags.length) { %>
-          <div class="mb-3">
-            <% blog.tags.forEach(tag => { %>
-              <span class="tag-badge"><%= tag %></span>
-            <% }) %>
-          </div>
+      <!-- Content -->
+      <div class="blog-content">
+        <%= blog.body %>
+      </div>
+
+      <!-- Actions -->
+      <div class="blog-actions">
+
+        <!-- Endorse button -->
+        <% if (user) { 
+          const alreadyEndorsed =
+            blog.endorsedBy?.some(
+              id => id.toString() === user._id.toString()
+            );
+        %>
+          <form class="endorse-form" data-blog-id="<%= blog._id %>">
+            <button
+              type="submit"
+              class="btn <%= alreadyEndorsed ? 'btn-secondary disabled' : 'btn-outline-primary' %>"
+            >
+              🌟 Endorse
+              <span class="badge bg-dark endorse-count">
+                <%= blog.endorses || 0 %>
+              </span>
+            </button>
+          </form>
         <% } %>
 
-        <p class="blog-content"><%= blog.body %></p>
+        <!-- Back -->
+        <a href="/" class="btn btn-outline-secondary">
+          ← Back to Home
+        </a>
 
-        <a href="/" class="btn btn-secondary back-btn">← Back to Home</a>
       </div>
     </div>
   </main>
 
-  <!-- Include the AI Sidebar partial -->
+  <!-- AI Sidebar -->
   <%- include('./partials/aiSidebar') %>
   <%- include('./partials/footer') %>
   <%- include("./partials/script") %>
+
+  <!-- Endorse script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.querySelector(".endorse-form");
+      if (!form) return;
+
+      form.addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const blogId = this.dataset.blogId;
+        const button = this.querySelector("button");
+        const badge = this.querySelector(".endorse-count");
+
+        try {
+          const res = await fetch(`/blog/${blogId}/endorse`, {
+            method: "POST"
+          });
+          const data = await res.json();
+
+          if (data.endorsed) {
+            button.classList.remove("btn-outline-primary");
+            button.classList.add("btn-secondary", "disabled");
+            badge.innerText = data.count;
+          }
+        } catch (err) {
+          console.error("Endorse failed:", err);
+        }
+      });
+    });
+  </script>
 </body>
 </html>

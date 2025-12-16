@@ -3,59 +3,65 @@
 <head>
   <%- include("./partials/head") %>
   <title><%= userName %>'s Blogs</title>
+
+  <style>
+    .profile-header {
+      background: linear-gradient(90deg, #e7f1ff 0%, #ffffff 100%);
+      border-left: 6px solid #0a3d91;
+      border-radius: 12px;
+    }
+
+    .profile-name {
+      color: #0a3d91;
+      font-weight: 700;
+    }
+
+    .empty-state {
+      color: #6c757d;
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
+
 <body>
   <%- include("./partials/nav") %>
 
   <main class="container mt-4">
-    <h2 class="mb-4 text-center">Blogs by <%= userName %></h2>
+
+    <!-- Profile Header -->
+    <div class="profile-header p-4 mb-5 shadow-sm">
+      <h2 class="profile-name mb-1">
+        <%= userName %>'s Blogs
+      </h2>
+      <p class="text-secondary mb-0">
+        All blogs published by <strong><%= userName %></strong>
+      </p>
+    </div>
 
     <% if (blogs.length === 0) { %>
-      <p class="text-center">No blogs found for this user.</p>
+      <p class="text-center empty-state">
+        No blogs published yet.
+      </p>
     <% } else { %>
+
       <div class="row">
-  <% blogs.forEach(blog => { %>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 shadow-sm">
+        <% blogs.forEach(blog => { %>
 
-        <% if (blog.coverImageURL) { %>
-          <% if (blog.coverImageURL.endsWith(".mp4")) { %>
-            <video class="card-img-top" controls>
-              <source src="<%= blog.coverImageURL %>" type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          <% } else { %>
-           <img src="<%= blog.coverImageURL || '/images/blog.png' %>" class="card-img-top" alt="Blog Cover">
-
-          <% } %>
-        <% } %>
-
-        <div class="card-body d-flex flex-column">
-          <h5 class="card-title"><%= blog.title %></h5>
-          <p class="card-text"><%= blog.body.substring(0, 100) %>...</p>
-
-          <div class="mt-auto d-flex gap-2">
-            <a href="/blog/<%= blog._id %>" class="btn btn-sm btn-primary">Read More</a>
-
-            <% if (user && blog.createdBy._id.toString() === user._id.toString()) { %>
-              <a href="/blog/edit/<%= blog._id %>" class="btn btn-sm btn-success">✏️ Edit</a>
-              <form action="/blog/delete/<%= blog._id %>" method="POST">
-                <button type="submit" class="btn btn-sm btn-danger">🗑️ Delete</button>
-              </form>
-            <% } %>
+          <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <%- include("./partials/blog-card", { blog, user }) %>
           </div>
-        </div>
+
+        <% }) %>
       </div>
-    </div>
-  <% }) %>
-</div>
 
     <% } %>
-</main>
-   <!-- Include the AI Sidebar partial -->
-  <%- include('./partials/aiSidebar') %>
-  <%- include('./partials/footer') %>
+  </main>
 
+  <!-- AI Sidebar -->
+  <%- include('./partials/aiSidebar') %>
+
+  <!-- Footer -->
+  <%- include('./partials/footer') %>
 
   <%- include("./partials/script") %>
 </body>

@@ -1,58 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <%- include("./partials/head") %>
   <title>Edit Blog</title>
 </head>
+
 <body>
   <%- include("./partials/nav") %>
-  <main  class="container mt-4">
-    <h2>Edit Blog</h2>
 
-    <!--  enctype added for file upload -->
-    <form action="/blog/edit/<%= blog._id %>" method="POST" enctype="multipart/form-data">
-      
-      <!-- Title -->
-      <div class="mb-3">
-        <label>Title</label>
-        <input name="title" class="form-control" value="<%= blog.title %>" required />
-      </div>
+  <main class="container mt-5">
 
-      <!-- Body -->
-      <div class="mb-3">
-        <label>Content</label>
-        <textarea name="body" class="form-control" rows="6" required><%= blog.body %></textarea>
-      </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10 col-sm-12">
 
-      <!-- ✅ Preview current image -->
-      <% if (blog.coverImageURL) { %>
-        <div class="mb-3">
-          <label>Current Cover Image</label><br />
-          <img src="<%= blog.coverImageURL %>" alt="Cover" style="max-width: 200px; margin-bottom: 10px;" />
+        <div class="card shadow-sm border-0">
+          <div class="card-body p-4">
+
+            <h2 class="mb-4 text-center" style="color:#0a3d91;">
+              Edit Blog
+            </h2>
+
+            <form
+              action="/blog/edit/<%= blog._id %>"
+              method="POST"
+              enctype="multipart/form-data"
+            >
+
+              <!-- Title -->
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Title</label>
+                <input
+                  name="title"
+                  class="form-control rounded-pill px-4"
+                  value="<%= blog.title %>"
+                  required
+                />
+              </div>
+
+              <!-- Content -->
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Content</label>
+                <textarea
+                  name="body"
+                  class="form-control rounded-4 px-4 py-3"
+                  rows="7"
+                  required
+                ><%= blog.body %></textarea>
+              </div>
+
+              <!-- Current Image -->
+              <% if (blog.coverImageURL) { %>
+                <div class="mb-4">
+                  <label class="form-label fw-semibold">Current Cover Image</label><br />
+                  <img
+                    src="<%= blog.coverImageURL %>"
+                    style="max-width: 220px; border-radius: 12px;"
+                  />
+                </div>
+              <% } %>
+
+              <!-- Upload -->
+              <div class="mb-4">
+                <label class="form-label fw-semibold">Upload New Cover Image</label>
+                <input
+                  type="file"
+                  name="coverImage"
+                  class="form-control rounded-pill px-3"
+                  accept="image/*"
+                />
+              </div>
+
+              <!-- Actions -->
+              <div class="d-flex justify-content-between align-items-center mt-4">
+                <a href="/" class="btn btn-outline-secondary rounded-pill px-4">
+                  ← Back to Home
+                </a>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary rounded-pill px-5"
+                  style="background-color:#0a3d91; border:none;"
+                >
+                  Update Blog
+                </button>
+              </div>
+
+            </form>
+
+          </div>
         </div>
-      <% } %>
 
-      <!-- ✅ Upload new image -->
-      <div class="mb-3">
-        <label>Upload New Cover Image</label>
-        <input type="file" name="coverImage" class="form-control" accept="image/*" />
       </div>
-
-      <!-- ❌ Remove this if switching to file-based only -->
-      <!-- 
-      <div class="mb-3">
-        <label>Cover Image URL (if applicable)</label>
-        <input name="coverImageURL" class="form-control" value="<%= blog.coverImageURL %>" />
-      </div>
-      -->
-
-      <button type="submit" class="btn btn-primary">Update Blog</button>
-    </form>
+    </div>
   </main>
-   <!-- Include the AI Sidebar partial -->
+
   <%- include('./partials/aiSidebar') %>
-
   <%- include('./partials/footer') %>
-
+  <%- include("./partials/script") %>
 </body>
 </html>
